@@ -13,11 +13,27 @@ namespace ContractorsApp.Controllers
         [HttpGet]
         public List<Counterparty> Get()
         {
-            using (var db = new CounerpartyDB())
+            //С одной таблицей
+            /*using (var db = new CounerpartyDB())
             {
                 var query = from p in db.Contractors
                             orderby p.Id ascending
                             select p;
+                return query.ToList();
+            }*/
+            //С двумя таблицами
+            using (var db = new CounerpartyDB())
+            {
+                var query = from c in db.Contractors
+                            from p in db.Addresses.Where(q => q.CPid == c.Id).DefaultIfEmpty()
+                            orderby c.Id ascending
+                            select new Counterparty
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                                Phone = c.Phone,
+                                Address = p.BuildingAddress,
+                            };
                 return query.ToList();
             }
         }
@@ -26,9 +42,17 @@ namespace ContractorsApp.Controllers
         {
             using (var db = new CounerpartyDB())
             {
-                var query = from p in db.Contractors
-                            where p.Id == id
-                            select p;
+                var query = from c in db.Contractors
+                            from p in db.Addresses.Where(q => q.CPid == c.Id).DefaultIfEmpty()
+                            where c.Id == id
+                            orderby c.Id ascending
+                            select new Counterparty
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                                Phone = c.Phone,
+                                Address = p.BuildingAddress,
+                            };              
                 return query.ToList()[0];
             }
         }
@@ -37,15 +61,27 @@ namespace ContractorsApp.Controllers
         {
             using (var db = new CounerpartyDB())
             {
-                db.Insert(cp);
+                cp.Id = db.InsertWithInt32Identity(cp);
+                db.Addresses
+                    .Value(c => c.BuildingAddress, cp.Address)
+                    .Value(c=> c.CPid, cp.Id)
+                    .Insert();
             }
         }
         [HttpPut]
         public void Put(int id, [FromBody] Counterparty cp)
         {
             using (var db = new CounerpartyDB())
-            {
-                db.Contractors.Where(p => p.Id == id).Set(p => p.Name, cp.Name).Set(p => p.Phone, cp.Phone).Update();
+            {              
+                db.Contractors
+                    .Where(p => p.Id == id)
+                    .Set(p => p.Name, cp.Name)
+                    .Set(p => p.Phone, cp.Phone)
+                    .Update();
+                db.Addresses
+                    .Where(c => c.CPid == id)
+                    .Set(c => c.BuildingAddress, cp.Address)
+                    .Update();
             }
         }
         [HttpDelete]
@@ -54,6 +90,7 @@ namespace ContractorsApp.Controllers
             using (var db = new CounerpartyDB())
             {
                 db.Contractors.Where(p => p.Id == id).Delete();
+                db.Addresses.Where(c => c.CPid == id).Delete();
             }
         }        
     }

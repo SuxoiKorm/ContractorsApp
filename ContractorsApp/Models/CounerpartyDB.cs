@@ -11,6 +11,7 @@ namespace ContractorsApp.Models
         public CounerpartyDB() : base("CounerpartyDB") { }
 
         public ITable<Counterparty> Contractors => GetTable<Counterparty>();
+        public ITable<Address> Addresses => GetTable<Address>();
 
     }
 }

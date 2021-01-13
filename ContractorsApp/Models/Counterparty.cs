@@ -15,5 +15,6 @@ namespace ContractorsApp.Models
         public string Name { get; set; }
         [Column(Name = "Phone"), NotNull]
         public string Phone { get; set; }
+        public string Address { get; set;}
     }
 }
