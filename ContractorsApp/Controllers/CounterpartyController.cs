@@ -57,7 +57,7 @@ namespace ContractorsApp.Controllers
             }
         }
         [HttpPost]
-        public void Post([FromBody] Counterparty cp)
+        public void Post(Counterparty cp)
         {
             using (var db = new CounerpartyDB())
             {

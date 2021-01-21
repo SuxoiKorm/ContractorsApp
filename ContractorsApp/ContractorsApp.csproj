@@ -176,6 +176,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\mainscript.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Styles\mainstyle.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
