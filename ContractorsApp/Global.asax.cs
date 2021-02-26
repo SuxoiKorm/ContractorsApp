@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ContractorsApp.Jobs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,9 @@ namespace ContractorsApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            CurrencyScheduler.Start();
+            Console.WriteLine("Test");
         }
     }
 }

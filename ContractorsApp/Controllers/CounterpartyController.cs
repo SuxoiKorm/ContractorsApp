@@ -10,21 +10,33 @@ namespace ContractorsApp.Controllers
 {
     public class CounterpartyController : ApiController
     {
+        private CounerpartyDB db = new CounerpartyDB();
+
         [HttpGet]
         public List<Counterparty> Get()
         {
-            //С одной таблицей
-            /*using (var db = new CounerpartyDB())
-            {
-                var query = from p in db.Contractors
-                            orderby p.Id ascending
-                            select p;
-                return query.ToList();
-            }*/
-            //С двумя таблицами
-            using (var db = new CounerpartyDB())
+            using (db)
             {
                 var query = from c in db.Contractors
+                            from p in db.Addresses.Where(q => q.CPid == c.Id).DefaultIfEmpty()
+                            orderby c.Id ascending
+                            select new Counterparty
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                                Phone = c.Phone,
+                                Address = p.BuildingAddress,
+                            };            
+                return query.ToList();
+            }
+        }
+
+        [HttpGet]
+        public List<Counterparty> Get(int limit, int offset)
+        {
+            using (db)
+            {
+                var query = from c in db.Contractors.Skip(offset).Take(limit)
                             from p in db.Addresses.Where(q => q.CPid == c.Id).DefaultIfEmpty()
                             orderby c.Id ascending
                             select new Counterparty
@@ -40,7 +52,7 @@ namespace ContractorsApp.Controllers
         [HttpGet]
         public Counterparty Get(int id)
         {
-            using (var db = new CounerpartyDB())
+            using (db)
             {
                 var query = from c in db.Contractors
                             from p in db.Addresses.Where(q => q.CPid == c.Id).DefaultIfEmpty()
@@ -59,7 +71,7 @@ namespace ContractorsApp.Controllers
         [HttpPost]
         public void Post(Counterparty cp)
         {
-            using (var db = new CounerpartyDB())
+            using (db)
             {
                 cp.Id = db.InsertWithInt32Identity(cp);
                 db.Addresses
@@ -71,7 +83,7 @@ namespace ContractorsApp.Controllers
         [HttpPut]
         public void Put(int id, [FromBody] Counterparty cp)
         {
-            using (var db = new CounerpartyDB())
+            using (db)
             {              
                 db.Contractors
                     .Where(p => p.Id == id)
@@ -87,7 +99,7 @@ namespace ContractorsApp.Controllers
         [HttpDelete]
         public void Delete(int id)
         {
-            using (var db = new CounerpartyDB())
+            using (db)
             {
                 db.Contractors.Where(p => p.Id == id).Delete();
                 db.Addresses.Where(c => c.CPid == id).Delete();

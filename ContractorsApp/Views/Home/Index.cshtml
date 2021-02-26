@@ -4,24 +4,29 @@
     <link rel="stylesheet" type="text/css" href="~/Styles/mainstyle.css">    
 </head>
 <body>
+    <script src="/scripts/mainscript.js" defer></script>
     <h1>CONTRACTORS APP</h1>
     <div class="main">
-        <article>
-            <ul>
+        <article id="mainArticle">
+            <ul id="mainList">
             </ul>
         </article>
         <article>
             <form name="editinputForm" class="contact1-form validate-form">
                 <div class="wrap-input1 validate-input" data-validate="Name is required">
-                    <input class="input1" type="text" name="name" placeholder="Name">
+                    <input class="input1" type="text" name="name" placeholder="Name" required>
                     <span class="shadow-input1"></span>
                 </div>
                 <div class="wrap-input1 validate-input" data-validate="Valid phone is required">
-                    <input class="input1" type="text" name="phone" placeholder="Phone">
+                    <input class="input1" type="text" name="phone" placeholder="Phone" required>
                     <span class="shadow-input1"></span>
                 </div>
                 <div class="wrap-input1 validate-input" data-validate="Valid address is required">
-                    <input class="input1" type="text" name="address" placeholder="Address">
+                    <input class="input1" type="text" name="address" placeholder="Address" required>
+                    <span class="shadow-input1"></span>
+                </div>
+                <div class="wrap-input1 validate-input" data-validate="Valid address is required">
+                    <input class="input1" type="file" name="fileUpload" placeholder="file" multiple>
                     <span class="shadow-input1"></span>
                 </div>
                 <div class="container-contact1-form-btn">
@@ -30,11 +35,10 @@
                             Save
                         </span>
                     </button>
-                    <script src="/scripts/mainscript.js"></script>
                 </div>
             </form>
         </article>
     </div>
-    <script src="/scripts/mainscript.js"></script>
+    <!--script src="/scripts/mainscript.js"></!--script-->
 </body>
 </html>

@@ -12,6 +12,8 @@ namespace ContractorsApp.Models
 
         public ITable<Counterparty> Contractors => GetTable<Counterparty>();
         public ITable<Address> Addresses => GetTable<Address>();
+        public ITable<Currencies> Currency => GetTable<Currencies>();
+
 
     }
 }
